@@ -1,0 +1,35 @@
+//Set below object into course.json;
+
+"_tooltip": {
+        "_isEnabled": true
+}
+
+//Add the any html element with attributes "data-title","data-rel"and onmouseenter event, add this html element into the component.json or block.json content( which appeared on screen) i.e.(body or title text)
+//example component.json
+{
+	"_id": "c-10",
+	"_parentId": "b-05",
+	"_type": "component",
+	"_component": "openTextInput",
+	"_classes": "",
+	"body": "Description of the <span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip.call(this)'>Tooltip over</span>",
+	"placeholder": "Enter your answer here",
+	"audioTitle":"click here to listen audio"
+},
+//Like  "body": "Description of the <span title='tooltip text goes here' rel='tooltip' onmouseenter='tooltip.call(this)'>Tooltip over</span>",
+
+//For block.json
+{
+    "_id": "b-10",
+    "_parentId": "a-05",
+    "_type": "block",
+    "_classes": "",
+    "title": "b-10",
+    "displayTitle": "",
+    "body": "<span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip.call(this)'>Tooltip over</span>",
+}
+//like  "body": "Description of the <span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip.call(this)'>Tooltip over</span>",
+
+//NOTE:It can be apply to any level of adapt framework.
+
+//NOTE:To configure properties refer ./js/conf.js

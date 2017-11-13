@@ -1,0 +1,21 @@
+{
+    "name": "adapt-tooltip",
+    "repository": "git://github.com/NayanKhedkar/adapt-tooltip.git",
+    "framework": "^2.0.0",
+    "version": "2.0.0",
+    "homepage": "https://github.com/NayanKhedkar/adapt-tooltip",
+    "issues": "",
+    "authors": [
+    "Nayan Khedkar <nayan.khedkar@exultcorp.com>"
+     ],
+    "displayName": "Tooltip",
+    "extension": "tooltip",
+    "description": "An extension tooltip that appears when the user moves the mouse over an element",
+    "main": "/js/adapt-tooltip.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-extension"
+    ],
+    "license": "GPLv3",
+    "targetAttribute": "_tooltip"
+}
