@@ -15,7 +15,7 @@
         "course": {
           "type":"object",
           "properties":{
-              "_resources": {
+              "_tooltip": {
                 "type": "object",
                 "required": false,
                 "legend": "Tooltip",
