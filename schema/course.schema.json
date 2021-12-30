@@ -1,0 +1,28 @@
+{
+  "$anchor": "bookmarking-course",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$patch": {
+    "source": {
+      "$ref": "course"
+    },
+    "with": {
+      "properties": {
+        "_tooltip": {
+          "type": "object",
+          "title": "Tooltip",
+          "default": {},
+          "required": [],
+          "properties": {
+            "_isEnabled": {
+              "type": "boolean",
+              "title": "Enable Tooltip",
+              "description": "If set to 'false', Tooltip will be disabled.To add to text use- <span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip(event);'>Tooltip over</span>",
+              "default": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -2,64 +2,69 @@
  * adapt-tooltip
  * License -
  */
-define(function(require) {
-    var Adapt = require('core/js/adapt');
-    var CONFIG = require('./conf');
-    var $tooltip = null;
-    var $targetEle = null;
+import Adapt from 'core/js/adapt';
+import CONFIG from './conf';
+class Tooltip extends Backbone.Controller {
 
-    function setUptoolTip() {
-        window.tooltip = onMouseEnter;
-    };
+    initialize() {
+        this.$tooltip = null;
+        this.$targetEle = null;
+        Adapt.on("app:dataReady", this.setUptoolTip.bind(this));
+    }
 
-    var onMouseEnter = function(evt) {
-        $tooltip = $('<div id="tooltip"></div>');
-        $targetEle = $(this);
-        var tip = $targetEle.attr('data-title');
+    setUptoolTip() {
+        if (!(Adapt.course.get('_tooltip')?._isEnabled)) return;
+        window.tooltip = this.onMouseEnter.bind(this);
+    }
+
+    onMouseEnter(event) {
+        this.$tooltip = $('<div id="tooltip"></div>');
+        this.$targetEle = $(event.currentTarget);
+        const tip = this.$targetEle.attr('data-title');
         if (!tip || tip == '') return false;
-        var lazyLayout = _.debounce(showTooltip, 200);
-        $tooltip.css('opacity', 0).html(tip).appendTo('body');
-        showTooltip();
-        $(window).resize(_.bind(lazyLayout, this));
-        $targetEle.on('mouseleave', removeTooltip);
-        $tooltip.on('click',removeTooltip);
-    };
+        const lazyLayout = _.debounce(this.showTooltip.bind(this), 200);
+        this.$tooltip.css('opacity', 0).html(tip).appendTo('body');
+        this.showTooltip();
+        $(window).resize(lazyLayout.bind(this));
+        this.$targetEle.on('mouseleave', this.removeTooltip.bind(this));
+        this.$tooltip.on('click', this.removeTooltip.bind(this));
+    }
 
-    function showTooltip() {
-        if (!$tooltip || !$targetEle) return;
-        setUptoolTipWidth();
-        var targetEleLeft = $targetEle.offset().left;
-        var targetEleTop = $targetEle.offset().top;
-        var targetEleWidth = $targetEle.outerWidth();
+    showTooltip() {
+        if (!this.$tooltip || !this.$targetEle) return;
 
-        var tooltipWidth = $tooltip.outerWidth();
-        var tooltipHeight = $tooltip.outerHeight();
+        const targetEleLeft = this.$targetEle.offset().left;
+        const targetEleTop = this.$targetEle.offset().top;
+        const targetEleWidth = this.$targetEle.outerWidth();
 
-        var posLeft = targetEleLeft + (targetEleWidth / 2) - (tooltipWidth / 2);
-        var posTop = targetEleTop - tooltipHeight - CONFIG.POSIONFROMTEXT;
+        const tooltipWidth = this.$tooltip.outerWidth();
+        const tooltipHeight = this.$tooltip.outerHeight();
+
+        let posLeft = targetEleLeft + (targetEleWidth / 2) - (tooltipWidth / 2);
+        let posTop = targetEleTop - tooltipHeight - CONFIG.POSITION_FROM_TEXT;
 
         if (posLeft < 0) {
-            posLeft = targetEleLeft + targetEleWidth / 2 - CONFIG.POSIONFROMTEXT;
-            $tooltip.addClass('left');
+            posLeft = targetEleLeft + targetEleWidth / 2 - CONFIG.POSITION_FROM_TEXT;
+            this.$tooltip.addClass('left');
         } else {
-            $tooltip.removeClass('left');
+            this.$tooltip.removeClass('left');
         }
 
         if (posLeft + tooltipWidth > $(window).width()) {
-            posLeft = targetEleLeft - tooltipWidth + targetEleWidth / 2 + CONFIG.POSIONFROMTEXT;
-            $tooltip.addClass('right');
+            posLeft = targetEleLeft - tooltipWidth + targetEleWidth / 2 + CONFIG.POSITION_FROM_TEXT;
+            this.$tooltip.addClass('right');
         } else {
-            $tooltip.removeClass('right');
+            this.$tooltip.removeClass('right');
         }
 
         if (posTop < 0) {
-            var posTop = targetEleTop + targetEleTop;
-            $tooltip.addClass('top');
+            posTop = targetEleTop + targetEleTop;
+            this.$tooltip.addClass('top');
         } else {
-            $tooltip.removeClass('top');
+            this.$tooltip.removeClass('top');
         }
-
-        $tooltip.css({
+        this.setUptoolTipWidth();
+        this.$tooltip.css({
             left: posLeft,
             top: posTop
         }).animate({
@@ -67,30 +72,27 @@ define(function(require) {
             opacity: 1
         }, CONFIG.DURATION, CONFIG.EASING);
 
-    };
-    function setUptoolTipWidth() {
-        if ($(window).width() < $tooltip.outerWidth() * CONFIG.PADDINGFACTOR) {
-            $tooltip.css('max-width', $(window).width() / 2);
-        } else {
-            $tooltip.css('max-width', CONFIG.MAX_WIDTH);
-        }
-    };
+    }
 
-    function removeTooltip() {
-        $tooltip.animate({
+    setUptoolTipWidth() {
+        if ($(window).width() < this.$tooltip.outerWidth() * CONFIG.PADDING_FACTOR) {
+            this.$tooltip.css('max-width', $(window).width() / 2);
+        } else {
+            this.$tooltip.css('max-width', CONFIG.MAX_WIDTH);
+        }
+    }
+
+    removeTooltip(event) {
+        this.$tooltip.animate({
             top: '-=' + CONFIG.ANIMATE_TOP,
             opacity: 0
-        }, CONFIG.DURATION, CONFIG.EASING, function() {
-            $(this).remove();
-            $tooltip = null;
-            $targetEle = null;
+        }, CONFIG.DURATION, CONFIG.EASING, (e) => {
+            this.$tooltip.remove();
+            this.$tooltip = null;
+            this.$targetEle = null;
         });
-    };
+    }
 
-    Adapt.on("app:dataReady", function() {
-        var tooltip = Adapt.course.get('_tooltip')
-        if (tooltip && tooltip._isEnabled) {
-            setUptoolTip();
-        }
-    });
-});
+};
+
+export default new Tooltip();

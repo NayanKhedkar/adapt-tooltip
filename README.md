@@ -28,7 +28,7 @@ This extension can also be installed by adding the extension to the adapt.json f
 ## How To Implement
 
 Assign the attribute data-rel="tooltip" and data-title="Enter your tip here" to any of body tags in HTML file where you want the tooltip to pop up when called. Set title value with your tip (use <strong>, <em> etc. to distinguish text fragments, but avoid block elements).
-*e.g.* `"<span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip.call(this)'>Tooltip over</span>"`
+*e.g.* `"<span data-title='tooltip text goes here' data-rel='tooltip' onmouseenter='tooltip(event);'>Tooltip over</span>"`
 
 *To configure properties refer ./js/conf.js*
 
